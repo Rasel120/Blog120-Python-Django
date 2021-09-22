@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Demo Blog</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/animate.css/animate.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Company - v4.2.0
+  * Template URL: https://bootstrapmade.com/company-free-html-bootstrap-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center">
+      <!-- Normal linking system -->
+      <h1 class="logo me-auto"><a href="/blog"><span>Blog</span> Demo</a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+       <!-- <a href="{/blog" class="logo me-auto me-lg-0"><img src="{% static 'img/logo.png' %}" alt="" class="img-fluid"></a> -->
+
+      <nav id="navbar" class="navbar order-last order-lg-0">        
+        <ul>
+          
+          <li><a href="/blog"{% if request.path == url %} class="active"{% endif %}>Blog</a></li>          
+          <li><a href="/about"{% if request.path == url %} class="active"{% endif %}>About</a><li>          
+          <li><a href="/contact"{% if request.path == url %} class="active"{% endif %}>Contact</a></li> 
+          {% if user.is_authenticated %}        
+          <li><a href="/profile"{% if request.path == url %} class="active"{% endif %}>Profile</a></li> 
+          {% else %}
+          <li><a href="/login"{% if request.path == url %} class="active"{% endif %}>Login</a></li> 
+          {% endif %}
+        </ul>
+
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+<!-- 
+      <form method="GET" action="/search" class="d-flex"> {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="queres" id="query">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form> -->
+      <div class="header-social-links d-flex">
+        <a href="#" target="blank"  class="twitter"><i class="bu bi-twitter"></i></a>
+        <a href="https://www.facebook.com/Raselhossain120/" target="blank"  class="facebook"><i class="bu bi-facebook"></i></a>
+        <a href="https://www.linkedin.com/in/rasel120/" target="blank"  class="linkedin"><i class="bu bi-linkedin"></i></i></a>
+      </div>
+
+    </div>
+  </header><!-- End Header -->
+
+

@@ -1,0 +1,138 @@
+{% block header %}
+    {% include  'common/header.html' %}
+{% endblock header %}
+
+{% load static %}
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Blog</h2>
+          <ol>
+            <li><a href="/blog">Blog</a></li>
+            <li>Blog</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Blog Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up">
+        <div class="row">
+          <div class="col-lg-8 entries">
+
+        {% for obj in products|slice:":4" %}  <!-- limit=3 -->
+
+            <article class="entry">
+              <div class="entry-img">
+                <img src="{{obj.postimage.url }}" alt="" class="img-fluid">
+              </div>
+              <h2 class="entry-title">
+                <a href="/blog/{{obj.slug}}">{{ obj.title|truncatewords:18 }}</a>
+              </h2>
+
+              <div class="entry-meta">
+                <ul>
+                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-single.html">{{obj.author}}</a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-single.html"><time>{{obj.timestamp}}</time></a></li>
+                  <li class="d-flex align-items-center"><span > {{obj.views}} views</span></li>
+                </ul>
+              </div>
+
+              <div class="entry-content">
+                <p>{{ obj.content|truncatewords:22|safe }}</p>
+                <div class="read-more">
+                  <a href="/blog/{{obj.slug}}">Read More</a>
+                </div>
+              </div>
+            </article><!-- End blog entry -->
+        {% endfor %}
+
+<!-- pagination part From django Documentation https://docs.djangoproject.com/en/3.2/topics/pagination/ -->
+            <div class="blog-pagination">
+              <ul class="justify-content-center">
+                <span class="step-links">
+                    {% if products.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ products.previous_page_number }}">|previous|</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ products.number }} of {{ products.paginator.num_pages }}.
+                    </span>
+
+                    {% if products.has_next %}
+                        <a href="?page={{ products.next_page_number }}">|next|</a>
+                        <a href="?page={{ products.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+              </ul>
+            </div> <!-- End pagination part -->
+
+          </div><!-- End blog entries list -->
+
+
+
+
+          <div class="col-lg-4">
+            <div class="sidebar">
+
+              <h3 class="sidebar-title">Search</h3>
+              <div class="sidebar-item search-form">
+                <form method="GET" action="/search">
+                  <input type="text" name="q" id="query">
+                  <button type="submit"><i class="bi bi-search"></i></button>
+                </form>
+              </div><!-- End sidebar search formn-->
+
+              <h3 class="sidebar-title">Categories <hr></h3>
+              <div class="sidebar-item categories">
+              {% for cat in cat_name %}
+                <ul>
+                  <li><a href="{{cat.get_absolute_url}}">{{ cat.name }}<span>{{ cat.post.count }}</span></a></li>
+                </ul>  <!-- post forigenkey er total count kora  -->
+              {% endfor %}
+              </div><!-- End sidebar categories-->
+
+
+              <h3 class="sidebar-title">Recent Posts</h3>
+              <hr>
+              <div class="sidebar-item recent-posts">
+                {% for obj in blog_all|slice:":4" %}
+                <div class="post-item clearfix">
+                  <img src="{{obj.postimage.url }}" alt="">
+                  <h4><a href="/blog/{{obj.slug}}">{{ obj.title|truncatewords:12 }}</a></h4>
+                  <time>{{ obj.timestamp|timesince }}</time>
+                </div>
+                {% endfor %}
+              </div><!-- End sidebar recent posts-->
+
+              <h3 class="sidebar-title">Most View Posts</h3>
+              <hr>
+              <div class="sidebar-item recent-posts">
+                {% for obj in mView|slice:":4" %}
+                <div class="post-item clearfix">                  
+                  <img src="{{obj.postimage.url }}" alt="">
+                  <h4><a href="/blog/{{obj.slug}}">{{ obj.title|truncatewords:12 }}</a></h4>
+                  <time>{{ obj.timestamp|timesince }}</time>
+                </div>
+                {% endfor %}
+              </div><!-- End sidebar Most posts-->
+
+            </div><!-- End sidebar -->
+          </div><!-- End blog sidebar -->
+        </div>
+      </div>
+    </section><!-- End Blog Section -->
+
+  </main><!-- End #main -->
+
+
+{% block footer %}
+    {% include  'common/footer.html' %}
+{% endblock footer %}

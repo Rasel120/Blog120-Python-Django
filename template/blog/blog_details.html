@@ -1,0 +1,195 @@
+{% block header %}
+  {% include  'common/header.html' %}
+{% endblock header %}
+{% load static %}
+
+{% load extras %}
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Blog</h2>
+          <ol>
+            <li><a href="/blog">Blog</a></li>
+            <li>Blog</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Blog Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up">
+        <div class="row">
+              <!-- ======= Blog Single Section ======= -->
+    <section id="blog" class="blog">
+      <div class="container" data-aos="fade-up">
+        <div class="row">
+          <div class="col-lg-8 entries">
+            <article class="entry entry-single">
+              <div class="entry-img">
+                <img src="{{post.postimage.url }}" alt="" class="img-fluid">
+              </div>
+              <h2 class="entry-title">
+                <a href="{{blog.slug}}">{{ post.title }}</a>
+              </h2>
+
+              <div class="entry-meta">
+                <ul>
+                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-single.html">{{post.author}}</a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-single.html"><time>{{post.timestamp}}</time></a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a href="blog-single.html">{{ comment.count }} Comments</a></li>
+                  <li class="d-flex align-items-center"><span > {{post.views}} views</span></li>
+                </ul>
+              </div>
+               <div class="entry-content">
+                <p>{{post.content|safe}}</p>
+               </div>
+            </article><!-- End blog entry -->
+
+
+
+            <div class="blog-comments">
+              <h4 class="comments-count">{{ comment.count }} Comments</h4>
+              {% for com in comment %}
+
+              <div id="comment-1" class="comment">
+                <div class="d-flex">
+                  <div class="comment-img"><img src="{% static 'img/blog/comments-30.jpg' %}" alt=""></div>
+                  <div>
+                    <h5><a href="">{{ com.user }}</a> </h5> 
+                    <time>{{ com.timestamp|timesince }}</time>
+                    <p>{{ com.comment }}</p>
+    <!-- Reply Comment Form Part -->
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#replyBox{{com.sno}}" aria-expanded="false" aria-controls="replyBox{{com.sno}}">
+                      Reply
+                    </button>                    
+                    <div class="collapse" id="replyBox{{com.sno}}">  
+                    {% if user.is_authenticated %}               
+                      <form action="/blog/postcom" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                          <div class="col form-group">
+                            <textarea name="comment" class="form-control" placeholder="Your Reply*"></textarea>
+                          </div>
+                        </div>
+                        <input type="hidden" name="parentSno" value="{{com.sno}}">    
+                        <input type="hidden" name="postSno" value="{{post.sno}}">
+                        <button type="submit" class="btn btn-primary" >Comment Reply</button>
+                      </form>
+                    {% else %}
+                     <button type="submit" class="btn btn-primary">Please login to Reply a Comment</button> 
+                    {% endif %}
+                    </div>
+    <!-- Reply View Part -->
+                    <div id="comment-reply-1" class="comment comment-reply">
+                        {% for reply in replyDict|get_val:com.sno %}
+                      <div class="d-flex">
+                        <div class="comment-img"><img src="{% static 'img/blog/comments-30.jpg' %}" alt=""></div>
+                        <div>
+                          <h5><a href="">{{reply.user.username}}</a></h5>
+                          <time datetime="2020-01-01">{{reply.timestamp|timesince}}</time>
+                          <p>{{reply.comment}}</p>
+                        </div>
+                      </div>
+                        {% endfor %}
+                    </div><!-- End comment reply #1-->
+                  </div>
+                </div>
+              </div><!-- End comment #1 -->
+              {% endfor %}
+
+    <!-- Post a Comment Form part -->
+              <div class="reply-form">
+                <h4>Leave a Comment</h4>
+                {% if user.is_authenticated %} 
+                <form action="/blog/postcom" method="POST">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col form-group">
+                      <textarea name="comment" class="form-control" placeholder="Your Comment*"></textarea>                      
+                    </div>
+                  </div>
+                  <input type="hidden" name="postSno" value="{{post.sno}}">
+                  <input type="hidden" name="parentSno" value="">
+                  <button type="submit" class="btn btn-primary">Post Comment</button>
+                </form>
+                {% else %}
+                <button type="submit" class="btn btn-primary">Please login to Post a Comment </button>            
+                {% endif %}
+              </div>
+
+            </div>
+            <!-- End blog comments -->
+
+          </div><!-- End blog entries list -->
+
+
+
+
+          <div class="col-lg-4">
+            <div class="sidebar">
+              <h3 class="sidebar-title">Search</h3>
+              <div class="sidebar-item search-form">
+                <form method="GET" action="/search">
+                  <input type="text" name="q" id="query">
+                  <button type="submit"><i class="bi bi-search"></i></button>
+                </form>
+              </div><!-- End sidebar search formn-->
+
+              <h3 class="sidebar-title">Categories</h3>
+              <div class="sidebar-item categories">
+              {% for cat in categoryItem %}
+                <ul>
+                  <li><a href="{{cat.get_absolute_url}}">{{ cat.name }} <span>{{ cat.post.count }}</span></a></li>
+                </ul>  <!-- post forigenkey er total count kora  -->
+              {% endfor %}
+              </div><!-- End sidebar categories-->
+
+
+              <h3 class="sidebar-title">Recent Posts</h3>
+              <div class="sidebar-item recent-posts">
+                {% for obj in blog_all|slice:":4" %}
+                <div class="post-item clearfix">
+                  <img src="{{obj.postimage.url }}" alt="">
+                  <h4><a href="/blog/{{obj.slug}}">{{ obj.title|truncatewords:7 }}</a></h4>
+                  <time>{{ obj.timestamp|timesince }}</time>
+                </div>
+                {% endfor %}
+              </div><!-- End sidebar recent posts-->
+
+              <h3 class="sidebar-title">Most View Posts</h3>
+              <div class="sidebar-item recent-posts">
+                {% for obj in mView|slice:":4" %}
+                <div class="post-item clearfix">
+                  <img src="{{obj.postimage.url }}" alt="">
+                  <h4><a href="/blog/{{obj.slug}}">{{ obj.title|truncatewords:7 }}</a></h4>
+                  <time>{{ obj.timestamp|timesince }}</time>
+                </div>
+                {% endfor %}
+              </div><!-- End sidebar Most posts-->
+              
+            </div><!-- End sidebar -->
+          </div><!-- End blog sidebar -->
+        </div>
+      </div>
+    </section><!-- End Blog Single Section -->
+
+
+
+
+        </div>
+
+      </div>
+    </section><!-- End Blog Section -->
+
+  </main><!-- End #main -->
+
+
+{% block footer %}
+    {% include  'common/footer.html' %}
+{% endblock footer %}
